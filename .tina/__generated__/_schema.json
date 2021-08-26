@@ -1,0 +1,329 @@
+{
+  "collections": [
+    {
+      "name": "game",
+      "label": "Games",
+      "path": "content/games",
+      "fields": [
+        {
+          "type": "string",
+          "name": "name",
+          "label": "Name",
+          "namespace": [
+            "game",
+            "name"
+          ]
+        },
+        {
+          "type": "string",
+          "name": "deck",
+          "label": "Deck",
+          "isBody": true,
+          "ui": {
+            "component": "textarea"
+          },
+          "namespace": [
+            "game",
+            "deck"
+          ]
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "string",
+          "options": [
+            "Backlog",
+            "Playing",
+            "Finished"
+          ],
+          "namespace": [
+            "game",
+            "status"
+          ]
+        },
+        {
+          "type": "object",
+          "name": "meta",
+          "label": "Meta",
+          "fields": [
+            {
+              "name": "genre",
+              "label": "Genre",
+              "type": "string",
+              "options": [
+                "Action",
+                "Adventure",
+                "Platformer",
+                "Puzzle",
+                "Role-Playing",
+                "Shooter",
+                "Stealth",
+                "Strategy"
+              ],
+              "namespace": [
+                "game",
+                "meta",
+                "genre"
+              ]
+            },
+            {
+              "name": "platform",
+              "label": "Platform",
+              "type": "string",
+              "options": [
+                "Android, Google Play",
+                "Nintendo 3DS",
+                "Nintendo Advance",
+                "Nintendo Switch",
+                "Nintendo Wii",
+                "Nintendo Wii U",
+                "PC",
+                "PC, EA Origin",
+                "PC, Epic",
+                "PC, Prime Gaming",
+                "PC, Steam",
+                "PC, Uplay",
+                "PC, Xbox Game Pass",
+                "Playstation 2",
+                "Playstation 3",
+                "Playstation 4",
+                "Playstation Vita",
+                "Playstation VR",
+                "Xbox 360"
+              ],
+              "namespace": [
+                "game",
+                "meta",
+                "platform"
+              ]
+            },
+            {
+              "name": "medium",
+              "label": "Medium",
+              "type": "string",
+              "options": [
+                "Digital",
+                "Emulation",
+                "Physical"
+              ],
+              "namespace": [
+                "game",
+                "meta",
+                "medium"
+              ]
+            }
+          ],
+          "namespace": [
+            "game",
+            "meta"
+          ]
+        },
+        {
+          "type": "object",
+          "name": "sections",
+          "label": "Sections",
+          "list": true,
+          "templates": [
+            {
+              "name": "details",
+              "label": "Details",
+              "fields": [
+                {
+                  "name": "dateReleased",
+                  "label": "Released On",
+                  "type": "datetime",
+                  "ui": {
+                    "dateFormat": "MMM D, YYYY"
+                  },
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "details",
+                    "dateReleased"
+                  ]
+                },
+                {
+                  "name": "averageRating",
+                  "label": "Avg Rating (out of 100)",
+                  "type": "string",
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "details",
+                    "averageRating"
+                  ]
+                },
+                {
+                  "name": "averagePlaytime",
+                  "label": "Avg Playtime (in hours)",
+                  "type": "string",
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "details",
+                    "averagePlaytime"
+                  ]
+                },
+                {
+                  "name": "content",
+                  "label": "Content",
+                  "type": "string",
+                  "ui": {
+                    "component": "textarea"
+                  },
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "details",
+                    "content"
+                  ]
+                },
+                {
+                  "name": "learnMoreLink",
+                  "label": "Learn More Link",
+                  "type": "string",
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "details",
+                    "learnMoreLink"
+                  ]
+                }
+              ],
+              "namespace": [
+                "game",
+                "sections",
+                "details"
+              ]
+            },
+            {
+              "name": "backlog",
+              "label": "Backlog",
+              "fields": [
+                {
+                  "name": "interest",
+                  "label": "Interest",
+                  "type": "string",
+                  "options": [
+                    "Strong",
+                    "Weak"
+                  ],
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "backlog",
+                    "interest"
+                  ]
+                },
+                {
+                  "name": "content",
+                  "label": "Content",
+                  "type": "string",
+                  "ui": {
+                    "component": "textarea"
+                  },
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "backlog",
+                    "content"
+                  ]
+                }
+              ],
+              "namespace": [
+                "game",
+                "sections",
+                "backlog"
+              ]
+            },
+            {
+              "name": "review",
+              "label": "Review",
+              "fields": [
+                {
+                  "name": "dateFinished",
+                  "label": "Finished On",
+                  "type": "datetime",
+                  "ui": {
+                    "dateFormat": "MMM D, YYYY"
+                  },
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "review",
+                    "dateFinished"
+                  ]
+                },
+                {
+                  "name": "stars",
+                  "label": "My Stars",
+                  "type": "string",
+                  "options": [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "review",
+                    "stars"
+                  ]
+                },
+                {
+                  "name": "playtime",
+                  "label": "My Playtime (in hours)",
+                  "type": "string",
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "review",
+                    "playtime"
+                  ]
+                },
+                {
+                  "name": "content",
+                  "label": "Content",
+                  "type": "string",
+                  "ui": {
+                    "component": "textarea"
+                  },
+                  "namespace": [
+                    "game",
+                    "sections",
+                    "review",
+                    "content"
+                  ]
+                }
+              ],
+              "namespace": [
+                "game",
+                "sections",
+                "review"
+              ]
+            }
+          ],
+          "namespace": [
+            "game",
+            "sections"
+          ]
+        },
+        {
+          "type": "image",
+          "name": "boxart",
+          "label": "Boxart",
+          "namespace": [
+            "game",
+            "boxart"
+          ]
+        }
+      ],
+      "namespace": [
+        "game"
+      ]
+    }
+  ],
+  "namespace": []
+}

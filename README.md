@@ -1,2 +1,7 @@
-# tina-gamebin
-A variant of Gamebin using TinaCMS
+# My GameBin
+
+Built using TinaCMS
+
+```
+yarn tina-dev
+```
