@@ -115,7 +115,7 @@ const YearsList = (props) => {
   return (
     <>
       <Head>
-        <title>GameBin &gt; Years</title>
+        <title>GameBin &gt; By Year</title>
       </Head>
       <div className="bg-white overflow-hidden">
         <Navigation active="/year" />
