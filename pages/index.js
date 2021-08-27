@@ -1,6 +1,11 @@
 import Head from "next/head";
 import Navigation from "../components/Navigation";
-import { ChevronRightIcon, ArchiveIcon } from "@heroicons/react/solid";
+import {
+  ChevronRightIcon,
+  ArchiveIcon,
+  ClipboardListIcon,
+  CalendarIcon,
+} from "@heroicons/react/solid";
 
 const links = [
   {
@@ -8,6 +13,18 @@ const links = [
     href: "/game",
     description: "View list of all games",
     icon: ArchiveIcon,
+  },
+  {
+    title: "By Year",
+    href: "/year",
+    description: "View list of games finished by year",
+    icon: CalendarIcon,
+  },
+  {
+    title: "Backlog",
+    href: "/backlog",
+    description: "View list of games in the backlog",
+    icon: ClipboardListIcon,
   },
 ];
 

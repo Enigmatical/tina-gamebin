@@ -5,6 +5,7 @@ interface Props {
   stat: string;
   color?: string;
   Icon?: React.FC;
+  className?: string;
 }
 
 const Stat: React.FC<Props> = ({
@@ -12,9 +13,12 @@ const Stat: React.FC<Props> = ({
   stat,
   color = "text-gray-900",
   Icon = InformationCircleIcon,
+  className,
 }) => {
   return (
-    <div className="relative bg-white py-3 px-3 shadow rounded-lg overflow-hidden">
+    <div
+      className={`relative bg-white py-3 px-3 shadow rounded-lg overflow-hidden ${className}`}
+    >
       <dt>
         <div className="absolute bg-indigo-500 rounded-md p-3">
           <Icon className="h-6 w-6 text-white" aria-hidden="true" />

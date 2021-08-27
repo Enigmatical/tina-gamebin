@@ -7,9 +7,9 @@ interface Props {
 }
 
 const navigation = [
-  // { name: "Backlog", href: "/backlog" },
-  // { name: "Years", href: "/years" },
   { name: "Games", href: "/game" },
+  { name: "By Year", href: "/year" },
+  { name: "Backlog", href: "/backlog" },
 ];
 
 function classNames(...classes) {
