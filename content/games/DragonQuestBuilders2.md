@@ -2,7 +2,7 @@
 name: Dragon Quest Builders 2
 status: Playing
 meta:
-  genre: Strategy
+  genre: Sandbox
   platform: 'PC, Xbox Game Pass'
   medium: Digital
 sections:

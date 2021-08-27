@@ -45,7 +45,9 @@ export const GENRES = [
   "Platformer",
   "Puzzle",
   "Role-Playing",
+  "Sandbox",
   "Shooter",
+  "Simulation",
   "Stealth",
   "Strategy",
 ];

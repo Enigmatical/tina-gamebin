@@ -22,7 +22,7 @@ const GamePage = (props) => {
   return (
     <>
       <Head>
-        <title>GameBin &gt; Games &gt; {name}</title>
+        <title>GameBin &gt; {name}</title>
       </Head>
       <div className="bg-white overflow-hidden">
         <Navigation />
