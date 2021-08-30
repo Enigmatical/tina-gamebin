@@ -1,4 +1,4 @@
-import { CalendarIcon, ClockIcon, StarIcon } from "@heroicons/react/solid";
+import { ClockIcon } from "@heroicons/react/solid";
 import MarkedContent from "../../../components/MarkedContent";
 import Stat from "../../../components/Stat";
 import RatingStat from "./RatingStat";

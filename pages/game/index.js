@@ -8,22 +8,27 @@ import {
   ClipboardCopyIcon,
   ClipboardListIcon,
 } from "@heroicons/react/solid";
+import {
+  STATUS_BACKLOG,
+  STATUS_FINISHED,
+  STATUS_PLAYING,
+} from "../../.tina/constants";
 
 const StatusColumn = ({ status }) => {
   let Icon;
   let colors;
 
   switch (status) {
-    case "Finished":
+    case STATUS_FINISHED:
       Icon = ClipboardCheckIcon;
       colors = "text-green-600";
       break;
-    case "Playing":
+    case STATUS_PLAYING:
       Icon = ClipboardCopyIcon;
       colors = "text-yellow-600";
       break;
     default:
-    case "Backlog":
+    case STATUS_BACKLOG:
       Icon = ClipboardListIcon;
       colors = "text-red-600";
       break;
@@ -74,7 +79,7 @@ const GameList = (props) => {
         data: { status },
       },
     }) => {
-      return status === "Backlog";
+      return status === STATUS_BACKLOG;
     }
   );
 
@@ -84,7 +89,7 @@ const GameList = (props) => {
         data: { status },
       },
     }) => {
-      return status === "Playing";
+      return status === STATUS_PLAYING;
     }
   );
 
@@ -94,7 +99,7 @@ const GameList = (props) => {
         data: { status },
       },
     }) => {
-      return status === "Finished";
+      return status === STATUS_FINISHED;
     }
   );
 

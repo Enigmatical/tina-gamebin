@@ -14,17 +14,23 @@ import {
 } from "@heroicons/react/solid";
 import Navigation from "../../components/Navigation";
 import Stat from "../../components/Stat";
+import {
+  INTEREST_STRONG,
+  INTEREST_WEAK,
+  STATUS_PLAYING,
+  STATUS_BACKLOG,
+} from "../../.tina/constants";
 
 const InterestColumn = ({ interest }) => {
   let Icon;
   let colors;
 
   switch (interest) {
-    case "Strong":
+    case INTEREST_STRONG:
       Icon = ExclamationCircleIcon;
       colors = "text-green-600";
       break;
-    case "Weak":
+    case INTEREST_WEAK:
     default:
       Icon = QuestionMarkCircleIcon;
       colors = "text-yellow-600";
@@ -53,7 +59,7 @@ const BacklogList = (props) => {
 
   games.forEach((game) => {
     const status = game.node.data.status;
-    if (status === "Playing" || status === "Backlog") {
+    if (status === STATUS_PLAYING || status === STATUS_BACKLOG) {
       const sectionDetails = game.node.data.sections?.filter(
         (section) => section.__typename === "GameSectionsDetails"
       );

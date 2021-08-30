@@ -4,6 +4,7 @@ import { getGames, getStarString, getStarColor } from "../../lib/game";
 import { ArchiveIcon, CalendarIcon, ClockIcon } from "@heroicons/react/solid";
 import Navigation from "../../components/Navigation";
 import Stat from "../../components/Stat";
+import { STATUS_FINISHED } from "../../.tina/constants";
 
 /**
  * Sorts games by their finished date in descending order
@@ -35,12 +36,12 @@ const sortGames = (games) => {
         return 0;
       }
 
-      if (aFinished < bFinished) {
-        return -1;
+      if (aFinished > bFinished) {
+        return 1;
       }
 
-      if (bFinished > aFinished) {
-        return 1;
+      if (bFinished < aFinished) {
+        return -1;
       }
 
       if (aFinished === bFinished) {
@@ -65,20 +66,25 @@ const YearsList = (props) => {
   games.forEach((game) => {
     const name = game.node.data.name;
     const status = game.node.data.status;
-    if (status === "Finished") {
+    if (status === STATUS_FINISHED) {
       try {
+        const sectionDetails = game.node.data.sections?.filter(
+          (section) => section.__typename === "GameSectionsDetails"
+        );
         const sectionReview = game.node.data.sections?.filter(
           (section) => section.__typename === "GameSectionsReview"
         );
+
         const dateFinished = sectionReview[0].dateFinished;
         const yearFinished = new Date(dateFinished).getFullYear();
         if (!gamesByYear[yearFinished]) {
           gamesByYear[yearFinished] = { games: [], totalPlaytime: 0 };
         }
 
-        const playtime = parseInt(sectionReview[0].playtime);
-        if (playtime !== "NaN") {
-          gamesByYear[yearFinished].totalPlaytime += playtime;
+        const playtime =
+          sectionReview[0].playtime || sectionDetails[0].averagePlaytime || 0;
+        if (!Number.isNaN(parseInt(playtime))) {
+          gamesByYear[yearFinished].totalPlaytime += parseInt(playtime);
         }
 
         gamesByYear[yearFinished].games.push({
@@ -111,6 +117,8 @@ const YearsList = (props) => {
       return 0;
     }
   });
+
+  console.log("gamesByYear", gamesByYear);
 
   return (
     <>

@@ -7,6 +7,12 @@ import {
   CubeTransparentIcon,
   BookOpenIcon,
 } from "@heroicons/react/solid";
+import {
+  MEDIUM_PHYSICAL,
+  STATUS_BACKLOG,
+  STATUS_FINISHED,
+  STATUS_PLAYING,
+} from "../../../.tina/constants";
 
 interface Props {
   status?: string;
@@ -20,16 +26,16 @@ const StatusTag = ({ status }: { status: string }) => {
   let colors;
 
   switch (status) {
-    case "Finished":
+    case STATUS_FINISHED:
       Icon = ClipboardCheckIcon;
       colors = "bg-green-100 text-green-800";
       break;
-    case "Playing":
+    case STATUS_PLAYING:
       Icon = ClipboardCopyIcon;
       colors = "bg-yellow-100 text-yellow-800";
       break;
     default:
-    case "Backlog":
+    case STATUS_BACKLOG:
       Icon = ClipboardListIcon;
       colors = "bg-red-100 text-red-800";
       break;
@@ -82,7 +88,7 @@ const MediumTag = ({ medium }: { medium: string }) => {
   let Icon;
 
   switch (medium) {
-    case "Physical":
+    case MEDIUM_PHYSICAL:
       Icon = CubeIcon;
       break;
     default:

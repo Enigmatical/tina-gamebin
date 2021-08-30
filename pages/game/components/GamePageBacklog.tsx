@@ -2,6 +2,7 @@ import {
   ExclamationCircleIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/solid";
+import { INTEREST_STRONG } from "../../../.tina/constants";
 import MarkedContent from "../../../components/MarkedContent";
 import Stat from "../../../components/Stat";
 
@@ -13,7 +14,7 @@ interface Props {
 const InterestStat: React.FC<{ interest: string }> = ({ interest }) => {
   let Icon;
   let color;
-  if (interest === "Strong") {
+  if (interest === INTEREST_STRONG) {
     Icon = ExclamationCircleIcon;
     color = "text-green-600";
   } else {
