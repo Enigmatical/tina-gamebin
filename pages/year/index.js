@@ -118,8 +118,6 @@ const YearsList = (props) => {
     }
   });
 
-  console.log("gamesByYear", gamesByYear);
-
   return (
     <>
       <Head>
