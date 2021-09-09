@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import Head from "next/head";
 import { staticRequest, gql } from "tinacms";
 import { CameraIcon } from "@heroicons/react/solid";
@@ -173,6 +175,7 @@ export const getStaticPaths = async () => {
   });
 
   return {
+    // @ts-ignore
     paths: gamesList.getGameList.edges.map((game) => ({
       params: { filename: game.node.sys.filename },
     })),
