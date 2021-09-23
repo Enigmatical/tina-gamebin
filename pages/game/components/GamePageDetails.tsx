@@ -4,15 +4,15 @@ import Stat from "../../../components/Stat";
 import RatingStat from "./RatingStat";
 
 interface Props {
-  content: string;
+  summary: string;
   learnMoreLink?: string;
   dateReleased?: string;
-  averageRating?: string;
-  averagePlaytime?: string;
+  averageRating?: number;
+  averagePlaytime?: number;
 }
 
 const GamePageDetails: React.FC<Props> = ({
-  content,
+  summary,
   learnMoreLink,
   dateReleased,
   averageRating,
@@ -29,7 +29,7 @@ const GamePageDetails: React.FC<Props> = ({
 
   return (
     <>
-      <div className="mt-5 prose prose-indigo text-gray-500 mx-auto lg:max-w-none lg:row-start-1 lg:col-start-1">
+      <div className="mt-0 prose prose-indigo text-gray-500 mx-auto lg:max-w-none lg:row-start-1 lg:col-start-1">
         <h2>Details</h2>
       </div>
       {localDateReleased && (
@@ -38,10 +38,7 @@ const GamePageDetails: React.FC<Props> = ({
       {(averageRating || averagePlaytime) && (
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
           {averageRating && (
-            <RatingStat
-              name="Average Rating"
-              rating={parseInt(averageRating)}
-            />
+            <RatingStat name="Average Rating" rating={averageRating} />
           )}
           {averagePlaytime && (
             <Stat
@@ -53,7 +50,7 @@ const GamePageDetails: React.FC<Props> = ({
         </dl>
       )}
       <div className="mt-5 prose prose-indigo text-gray-500 mx-auto lg:max-w-none lg:row-start-1 lg:col-start-1">
-        <MarkedContent className="text-justify" content={content} />
+        <MarkedContent className="text-justify" content={summary} />
       </div>
       {learnMoreLink && (
         <div className="-mt-5 text-right">

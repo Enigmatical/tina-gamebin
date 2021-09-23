@@ -55,28 +55,16 @@ const BacklogList = (props) => {
    * Loops through all games, filtering for Playing and Backlog
    */
   const filterGames = [];
-  let totalAveragePlaytime = 0;
 
   games.forEach((game) => {
     const status = game.node.data.status;
     if (status === STATUS_PLAYING || status === STATUS_BACKLOG) {
-      const sectionDetails = game.node.data.sections?.filter(
-        (section) => section.__typename === "GameSectionsDetails"
-      );
       const sectionBacklog = game.node.data.sections?.filter(
         (section) => section.__typename === "GameSectionsBacklog"
       );
 
-      if (sectionDetails && sectionDetails.length > 0) {
-        const averagePlaytime = parseInt(sectionDetails[0].averagePlaytime);
-        if (averagePlaytime !== "NaN") {
-          totalAveragePlaytime += averagePlaytime;
-        }
-      }
-
       filterGames.push({
         ...game,
-        details: sectionDetails ? sectionDetails[0] : {},
         backlog: sectionBacklog ? sectionBacklog[0] : {},
       });
       return;
@@ -131,17 +119,12 @@ const BacklogList = (props) => {
             </h1>
           </div>
 
-          <dl className="mx-auto mt-5 grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <dl className="mx-auto mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Stat
               className="sm:col-start-2"
               name="Total"
               stat={sortedGames.length}
               Icon={ArchiveIcon}
-            />
-            <Stat
-              name="Playtime"
-              stat={`${totalAveragePlaytime} Hrs`}
-              Icon={ClockIcon}
             />
           </dl>
           <div className="mt-8 flex flex-col">
@@ -175,29 +158,11 @@ const BacklogList = (props) => {
                         >
                           Genre
                         </th>
-                        <th
-                          scope="col"
-                          className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Avg Rating
-                        </th>
-                        <th
-                          scope="col"
-                          className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Avg Playtime
-                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       {sortedGames.map(
-                        ({ node: { sys, data }, details, backlog }, idx) => {
-                          const starsNumber = countStars(
-                            parseInt(details.averageRating)
-                          );
-                          const starString = getStarString(starsNumber);
-                          const starColor = getStarColor(starsNumber);
-
+                        ({ node: { sys, data }, backlog }, idx) => {
                           return (
                             <tr
                               key={data.name}
@@ -232,18 +197,6 @@ const BacklogList = (props) => {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {data?.meta?.genre && <>{data.meta.genre}</>}
-                              </td>
-                              <td
-                                className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${
-                                  starColor || "text-gray-900"
-                                }`}
-                              >
-                                {details.averageRating ? starString : ""}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {details.averagePlaytime
-                                  ? `${details.averagePlaytime} Hrs`
-                                  : ""}
                               </td>
                             </tr>
                           );

@@ -147,15 +147,6 @@ export type GameMeta = {
   medium?: Maybe<Scalars['String']>;
 };
 
-export type GameSectionsDetails = {
-  __typename?: 'GameSectionsDetails';
-  dateReleased?: Maybe<Scalars['String']>;
-  averageRating?: Maybe<Scalars['String']>;
-  averagePlaytime?: Maybe<Scalars['String']>;
-  content?: Maybe<Scalars['String']>;
-  learnMoreLink?: Maybe<Scalars['String']>;
-};
-
 export type GameSectionsBacklog = {
   __typename?: 'GameSectionsBacklog';
   interest?: Maybe<Scalars['String']>;
@@ -170,12 +161,12 @@ export type GameSectionsReview = {
   content?: Maybe<Scalars['String']>;
 };
 
-export type GameSections = GameSectionsDetails | GameSectionsBacklog | GameSectionsReview;
+export type GameSections = GameSectionsBacklog | GameSectionsReview;
 
 export type Game = {
   __typename?: 'Game';
   name?: Maybe<Scalars['String']>;
-  deck?: Maybe<Scalars['String']>;
+  howLongToBeatId?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   meta?: Maybe<GameMeta>;
   sections?: Maybe<Array<Maybe<GameSections>>>;
@@ -242,14 +233,6 @@ export type GameMetaMutation = {
   medium?: Maybe<Scalars['String']>;
 };
 
-export type GameSectionsDetailsMutation = {
-  dateReleased?: Maybe<Scalars['String']>;
-  averageRating?: Maybe<Scalars['String']>;
-  averagePlaytime?: Maybe<Scalars['String']>;
-  content?: Maybe<Scalars['String']>;
-  learnMoreLink?: Maybe<Scalars['String']>;
-};
-
 export type GameSectionsBacklogMutation = {
   interest?: Maybe<Scalars['String']>;
   content?: Maybe<Scalars['String']>;
@@ -263,14 +246,13 @@ export type GameSectionsReviewMutation = {
 };
 
 export type GameSectionsMutation = {
-  details?: Maybe<GameSectionsDetailsMutation>;
   backlog?: Maybe<GameSectionsBacklogMutation>;
   review?: Maybe<GameSectionsReviewMutation>;
 };
 
 export type GameMutation = {
   name?: Maybe<Scalars['String']>;
-  deck?: Maybe<Scalars['String']>;
+  howLongToBeatId?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   meta?: Maybe<GameMetaMutation>;
   sections?: Maybe<Array<Maybe<GameSectionsMutation>>>;

@@ -15,16 +15,12 @@
           ]
         },
         {
+          "name": "howLongToBeatId",
+          "label": "HowLongToBeat(tm) ID#",
           "type": "string",
-          "name": "deck",
-          "label": "Deck",
-          "isBody": true,
-          "ui": {
-            "component": "textarea"
-          },
           "namespace": [
             "game",
-            "deck"
+            "howLongToBeatId"
           ]
         },
         {
@@ -126,78 +122,6 @@
           "label": "Sections",
           "list": true,
           "templates": [
-            {
-              "name": "details",
-              "label": "Details",
-              "fields": [
-                {
-                  "name": "dateReleased",
-                  "label": "Released On",
-                  "type": "datetime",
-                  "ui": {
-                    "dateFormat": "MMM D, YYYY"
-                  },
-                  "namespace": [
-                    "game",
-                    "sections",
-                    "details",
-                    "dateReleased"
-                  ]
-                },
-                {
-                  "name": "averageRating",
-                  "label": "Avg Rating (out of 100)",
-                  "type": "string",
-                  "namespace": [
-                    "game",
-                    "sections",
-                    "details",
-                    "averageRating"
-                  ]
-                },
-                {
-                  "name": "averagePlaytime",
-                  "label": "Avg Playtime (in hours)",
-                  "type": "string",
-                  "namespace": [
-                    "game",
-                    "sections",
-                    "details",
-                    "averagePlaytime"
-                  ]
-                },
-                {
-                  "name": "content",
-                  "label": "Content",
-                  "type": "string",
-                  "ui": {
-                    "component": "textarea"
-                  },
-                  "namespace": [
-                    "game",
-                    "sections",
-                    "details",
-                    "content"
-                  ]
-                },
-                {
-                  "name": "learnMoreLink",
-                  "label": "Learn More Link",
-                  "type": "string",
-                  "namespace": [
-                    "game",
-                    "sections",
-                    "details",
-                    "learnMoreLink"
-                  ]
-                }
-              ],
-              "namespace": [
-                "game",
-                "sections",
-                "details"
-              ]
-            },
             {
               "name": "backlog",
               "label": "Backlog",

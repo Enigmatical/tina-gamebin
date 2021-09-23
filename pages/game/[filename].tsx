@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
-
 import Head from "next/head";
 import { staticRequest, gql } from "tinacms";
 import { CameraIcon } from "@heroicons/react/solid";
 
+import { useExternalInfo } from "../../hooks/game";
 import { getGame } from "../../lib/game";
-import MarkedContent from "../../components/MarkedContent";
+
 import Navigation from "../../components/Navigation";
 
 import GamePageTags from "./components/GamePageTags";
@@ -19,7 +18,9 @@ const GamePage = (props) => {
       getGameDocument: { data: game },
     },
   } = props;
-  const { name, deck, status, sections, meta, boxart } = game;
+  const { name, howLongToBeatId, status, sections, meta, boxart } = game;
+
+  const external = useExternalInfo(howLongToBeatId);
 
   return (
     <>
@@ -40,7 +41,7 @@ const GamePage = (props) => {
               </h3>
               <GamePageTags
                 status={status}
-                genre={meta?.genre}
+                genre={meta?.genre || external?.genre}
                 medium={meta?.medium}
                 platform={meta?.platform}
               />
@@ -104,27 +105,21 @@ const GamePage = (props) => {
                 )}
               </div>
             </div>
-            <div className="mt-8 lg:mt-0">
-              <div className="text-base max-w-prose mx-auto lg:max-w-none">
-                <MarkedContent
-                  className="text-lg text-gray-500"
-                  content={deck}
-                ></MarkedContent>
-              </div>
-
+            <div>
+              {external && (
+                <GamePageDetails
+                  dateReleased={external?.dateReleased}
+                  averageRating={external?.averageRating}
+                  averagePlaytime={external?.averagePlaytime}
+                  summary={external?.summary}
+                  learnMoreLink={external?.learnMoreLink}
+                />
+              )}
               {sections &&
                 sections.map((section) => {
                   if (section.__typename === "GameSectionsReview") {
                     return (
                       <GamePageReview
-                        key={`${name}.${section.__typename}`}
-                        {...section}
-                      />
-                    );
-                  }
-                  if (section.__typename === "GameSectionsDetails") {
-                    return (
-                      <GamePageDetails
                         key={`${name}.${section.__typename}`}
                         {...section}
                       />

@@ -80,14 +80,6 @@ type GameMeta {
   medium: String
 }
 
-type GameSectionsDetails {
-  dateReleased: String
-  averageRating: String
-  averagePlaytime: String
-  content: String
-  learnMoreLink: String
-}
-
 type GameSectionsBacklog {
   interest: String
   content: String
@@ -100,11 +92,11 @@ type GameSectionsReview {
   content: String
 }
 
-union GameSections = GameSectionsDetails | GameSectionsBacklog | GameSectionsReview
+union GameSections = GameSectionsBacklog | GameSectionsReview
 
 type Game {
   name: String
-  deck: String
+  howLongToBeatId: String
   status: String
   meta: GameMeta
   sections: [GameSections]
@@ -147,14 +139,6 @@ input GameMetaMutation {
   medium: String
 }
 
-input GameSectionsDetailsMutation {
-  dateReleased: String
-  averageRating: String
-  averagePlaytime: String
-  content: String
-  learnMoreLink: String
-}
-
 input GameSectionsBacklogMutation {
   interest: String
   content: String
@@ -168,14 +152,13 @@ input GameSectionsReviewMutation {
 }
 
 input GameSectionsMutation {
-  details: GameSectionsDetailsMutation
   backlog: GameSectionsBacklogMutation
   review: GameSectionsReviewMutation
 }
 
 input GameMutation {
   name: String
-  deck: String
+  howLongToBeatId: String
   status: String
   meta: GameMetaMutation
   sections: [GameSectionsMutation]
