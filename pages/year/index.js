@@ -68,9 +68,6 @@ const YearsList = (props) => {
     const status = game.node.data.status;
     if (status === STATUS_FINISHED) {
       try {
-        const sectionDetails = game.node.data.sections?.filter(
-          (section) => section.__typename === "GameSectionsDetails"
-        );
         const sectionReview = game.node.data.sections?.filter(
           (section) => section.__typename === "GameSectionsReview"
         );
@@ -81,8 +78,7 @@ const YearsList = (props) => {
           gamesByYear[yearFinished] = { games: [], totalPlaytime: 0 };
         }
 
-        const playtime =
-          sectionReview[0].playtime || sectionDetails[0].averagePlaytime || 0;
+        const playtime = sectionReview[0].playtime || 0;
         if (!Number.isNaN(parseInt(playtime))) {
           gamesByYear[yearFinished].totalPlaytime += parseInt(playtime);
         }
@@ -152,7 +148,7 @@ const YearsList = (props) => {
                   <Stat name="Total" stat={games.length} Icon={ArchiveIcon} />
                   <Stat
                     name="Playtime"
-                    stat={`${totalPlaytime} Hrs`}
+                    stat={totalPlaytime ? `${totalPlaytime} Hrs` : "???"}
                     Icon={ClockIcon}
                   />
                 </dl>

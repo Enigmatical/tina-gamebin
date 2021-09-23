@@ -21,13 +21,9 @@ export default defineSchema({
           label: "Name",
         },
         {
+          name: "howLongToBeatId",
+          label: "HowLongToBeat(tm) ID#",
           type: "string",
-          name: "deck",
-          label: "Deck",
-          isBody: true,
-          ui: {
-            component: "textarea",
-          },
         },
         {
           name: "status",
@@ -66,43 +62,6 @@ export default defineSchema({
           label: "Sections",
           list: true,
           templates: [
-            {
-              name: "details",
-              label: "Details",
-              fields: [
-                {
-                  name: "dateReleased",
-                  label: "Released On",
-                  type: "datetime",
-                  ui: {
-                    dateFormat: "MMM D, YYYY",
-                  },
-                },
-                {
-                  name: "averageRating",
-                  label: "Avg Rating (out of 100)",
-                  type: "string",
-                },
-                {
-                  name: "averagePlaytime",
-                  label: "Avg Playtime (in hours)",
-                  type: "string",
-                },
-                {
-                  name: "content",
-                  label: "Content",
-                  type: "string",
-                  ui: {
-                    component: "textarea",
-                  },
-                },
-                {
-                  name: "learnMoreLink",
-                  label: "Learn More Link",
-                  type: "string",
-                },
-              ],
-            },
             {
               name: "backlog",
               label: "Backlog",

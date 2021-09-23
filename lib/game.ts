@@ -7,17 +7,10 @@ export const getGame = async (filename: string) => {
         getGameDocument(relativePath: $relativePath) {
           data {
             name
-            deck
+            howLongToBeatId
             status
             sections {
               __typename
-              ... on GameSectionsDetails {
-                content
-                learnMoreLink
-                dateReleased
-                averagePlaytime
-                averageRating
-              }
               ... on GameSectionsBacklog {
                 content
                 interest
@@ -61,10 +54,6 @@ export const getGames = async () => {
                 status
                 sections {
                   __typename
-                  ... on GameSectionsDetails {
-                    averageRating
-                    averagePlaytime
-                  }
                   ... on GameSectionsBacklog {
                     interest
                   }
