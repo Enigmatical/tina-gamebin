@@ -1,0 +1,32 @@
+fragment GameParts on Game {
+  name
+  deck
+  status
+  meta {
+    __typename
+    genre
+    platform
+    medium
+  }
+  sections {
+    __typename
+    ... on GameSectionsDetails {
+      dateReleased
+      averageRating
+      averagePlaytime
+      content
+      learnMoreLink
+    }
+    ... on GameSectionsBacklog {
+      interest
+      content
+    }
+    ... on GameSectionsReview {
+      dateFinished
+      stars
+      playtime
+      content
+    }
+  }
+  boxart
+}

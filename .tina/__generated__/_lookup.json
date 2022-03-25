@@ -12,55 +12,9 @@
   },
   "DocumentNode": {
     "type": "DocumentNode",
-    "resolveType": "multiCollectionDocument"
-  },
-  "PostsDocument": {
-    "type": "PostsDocument",
-    "resolveType": "collectionDocument",
-    "collection": "posts"
-  },
-  "PostsConnection": {
-    "type": "PostsConnection",
-    "resolveType": "collectionDocumentList",
-    "collection": "posts"
-  },
-  "GameDocument": {
-    "type": "GameDocument",
-    "resolveType": "collectionDocument",
-    "collection": "game"
-  },
-  "GameConnection": {
-    "type": "GameConnection",
-    "resolveType": "collectionDocumentList",
-    "collection": "game"
-  },
-  "YearFinishedDocument": {
-    "type": "YearFinishedDocument",
-    "resolveType": "multiCollectionDocument"
-  },
-  "YearDocument": {
-    "type": "YearDocument",
-    "resolveType": "collectionDocument",
-    "collection": "year"
-  },
-  "YearConnection": {
-    "type": "YearConnection",
-    "resolveType": "collectionDocumentList",
-    "collection": "year"
-  },
-  "BacklogGamesDocument": {
-    "type": "BacklogGamesDocument",
-    "resolveType": "multiCollectionDocument"
-  },
-  "BacklogDocument": {
-    "type": "BacklogDocument",
-    "resolveType": "collectionDocument",
-    "collection": "backlog"
-  },
-  "BacklogConnection": {
-    "type": "BacklogConnection",
-    "resolveType": "collectionDocumentList",
-    "collection": "backlog"
+    "resolveType": "multiCollectionDocument",
+    "createDocument": "create",
+    "updateDocument": "update"
   },
   "GameSections": {
     "type": "GameSections",
@@ -70,5 +24,17 @@
       "backlog": "GameSectionsBacklog",
       "review": "GameSectionsReview"
     }
+  },
+  "GameDocument": {
+    "type": "GameDocument",
+    "resolveType": "collectionDocument",
+    "collection": "game",
+    "createGameDocument": "create",
+    "updateGameDocument": "update"
+  },
+  "GameConnection": {
+    "type": "GameConnection",
+    "resolveType": "collectionDocumentList",
+    "collection": "game"
   }
 }

@@ -1,4 +1,4 @@
-import { defineSchema } from "@tinacms/cli";
+import { defineSchema } from "tinacms";
 import {
   STATUS,
   GENRES,

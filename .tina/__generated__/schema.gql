@@ -32,21 +32,25 @@ interface Node {
 interface Document {
   sys: SystemInfo
   id: ID!
+  form: JSON!
+  values: JSON!
 }
 
 """A relay-compliant pagination connection"""
 interface Connection {
-  totalCount: Int!
+  totalCount: Float!
 }
 
 type Query {
+  getOptimizedQuery(queryString: String!): String
   getCollection(collection: String): Collection!
   getCollections: [Collection!]!
   node(id: String): Node!
   getDocument(collection: String, relativePath: String): DocumentNode!
-  getDocumentList(before: String, after: String, first: Int, last: Int): DocumentConnection!
+  getDocumentList(before: String, after: String, first: Float, last: Float): DocumentConnection!
+  getDocumentFields: JSON!
   getGameDocument(relativePath: String): GameDocument!
-  getGameList(before: String, after: String, first: Int, last: Int): GameConnection!
+  getGameList(before: String, after: String, first: Float, last: Float): GameConnection!
 }
 
 type DocumentConnectionEdges {
@@ -56,20 +60,20 @@ type DocumentConnectionEdges {
 
 type DocumentConnection implements Connection {
   pageInfo: PageInfo
-  totalCount: Int!
+  totalCount: Float!
   edges: [DocumentConnectionEdges]
 }
 
 type Collection {
   name: String!
   slug: String!
-  label: String!
+  label: String
   path: String!
   format: String
   matches: String
   templates: [JSON]
   fields: [JSON]
-  documents(before: String, after: String, first: Int, last: Int): DocumentConnection!
+  documents(before: String, after: String, first: Float, last: Float): DocumentConnection!
 }
 
 union DocumentNode = GameDocument
@@ -127,14 +131,16 @@ type GameConnectionEdges {
 
 type GameConnection implements Connection {
   pageInfo: PageInfo
-  totalCount: Int!
+  totalCount: Float!
   edges: [GameConnectionEdges]
 }
 
 type Mutation {
   addPendingDocument(collection: String!, relativePath: String!, template: String): DocumentNode!
-  updateDocument(collection: String!, relativePath: String!, params: DocumentMutation!): DocumentNode!
+  updateDocument(collection: String, relativePath: String!, params: DocumentMutation!): DocumentNode!
+  createDocument(collection: String, relativePath: String!, params: DocumentMutation!): DocumentNode!
   updateGameDocument(relativePath: String!, params: GameMutation!): GameDocument!
+  createGameDocument(relativePath: String!, params: GameMutation!): GameDocument!
 }
 
 input DocumentMutation {

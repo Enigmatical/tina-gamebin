@@ -1,0 +1,38 @@
+query getGameDocument($relativePath: String!) {
+  getGameDocument(relativePath: $relativePath) {
+    sys {
+      filename
+      basename
+      breadcrumbs
+      path
+      relativePath
+      extension
+    }
+    id
+    data {
+      ...GameParts
+    }
+  }
+}
+
+query getGameList {
+  getGameList {
+    totalCount
+    edges {
+      node {
+        id
+        sys {
+          filename
+          basename
+          breadcrumbs
+          path
+          relativePath
+          extension
+        }
+        data {
+          ...GameParts
+        }
+      }
+    }
+  }
+}
