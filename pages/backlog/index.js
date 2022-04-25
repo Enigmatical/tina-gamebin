@@ -1,7 +1,7 @@
 import * as React from "react";
 import Head from "next/head";
 import {
-  getGames,
+  getBacklog,
   countStars,
   getStarString,
   getStarColor,
@@ -14,12 +14,7 @@ import {
 } from "@heroicons/react/solid";
 import Navigation from "../../components/Navigation";
 import Stat from "../../components/Stat";
-import {
-  INTEREST_STRONG,
-  INTEREST_WEAK,
-  STATUS_PLAYING,
-  STATUS_BACKLOG,
-} from "../../.tina/constants";
+import { INTEREST_STRONG, INTEREST_WEAK } from "../../.tina/constants";
 
 const InterestColumn = ({ interest }) => {
   let Icon;
@@ -58,59 +53,27 @@ const BacklogList = (props) => {
   let totalAveragePlaytime = 0;
 
   games.forEach((game) => {
-    const status = game.node.data.status;
-    if (status === STATUS_PLAYING || status === STATUS_BACKLOG) {
-      const sectionDetails = game.node.data.sections?.filter(
-        (section) => section.__typename === "GameSectionsDetails"
-      );
-      const sectionBacklog = game.node.data.sections?.filter(
-        (section) => section.__typename === "GameSectionsBacklog"
-      );
+    const sectionDetails = game.node.data.sections?.filter(
+      (section) => section.__typename === "GameSectionsDetails"
+    );
+    const sectionBacklog = game.node.data.sections?.filter(
+      (section) => section.__typename === "GameSectionsBacklog"
+    );
 
-      if (sectionDetails && sectionDetails.length > 0) {
-        const averagePlaytime = parseInt(sectionDetails[0].averagePlaytime);
-        if (averagePlaytime !== "NaN") {
-          totalAveragePlaytime += averagePlaytime;
-        }
+    if (sectionDetails && sectionDetails.length > 0) {
+      const averagePlaytime = parseInt(sectionDetails[0].averagePlaytime);
+      if (averagePlaytime !== "NaN") {
+        totalAveragePlaytime += averagePlaytime;
       }
-
-      filterGames.push({
-        ...game,
-        details: sectionDetails ? sectionDetails[0] : {},
-        backlog: sectionBacklog ? sectionBacklog[0] : {},
-      });
-      return;
     }
+
+    filterGames.push({
+      ...game,
+      details: sectionDetails ? sectionDetails[0] : {},
+      backlog: sectionBacklog ? sectionBacklog[0] : {},
+    });
     return;
   });
-
-  /**
-   * Sorts games alphabetically
-   */
-  const sortedGames = filterGames.sort(
-    (
-      {
-        node: {
-          data: { name: a },
-        },
-      },
-      {
-        node: {
-          data: { name: b },
-        },
-      }
-    ) => {
-      if (a < b) {
-        return -1;
-      }
-      if (b > a) {
-        return 1;
-      }
-      if (a === b) {
-        return 0;
-      }
-    }
-  );
 
   return (
     <>
@@ -135,7 +98,7 @@ const BacklogList = (props) => {
             <Stat
               className="sm:col-start-2"
               name="Total"
-              stat={sortedGames.length}
+              stat={filterGames.length}
               Icon={ArchiveIcon}
             />
             <Stat
@@ -190,7 +153,7 @@ const BacklogList = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {sortedGames.map(
+                      {filterGames.map(
                         ({ node: { sys, data }, details, backlog }, idx) => {
                           const starsNumber = countStars(
                             parseInt(details.averageRating)
@@ -262,7 +225,7 @@ const BacklogList = (props) => {
 };
 
 export const getStaticProps = async () => {
-  const games = await getGames();
+  const games = await getBacklog();
 
   return {
     props: {

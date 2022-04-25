@@ -17,6 +17,13 @@ export const getGames = async () => {
   return games;
 };
 
+export const getBacklog = async () => {
+  const client = ExperimentalGetTinaClient();
+  const games = await client.getBacklogGameListByName();
+
+  return games;
+};
+
 export const countStars = (rating: number) => {
   return Math.floor(rating / 20);
 };

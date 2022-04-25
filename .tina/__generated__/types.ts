@@ -387,6 +387,11 @@ export type GetGameListByNameQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetGameListByNameQuery = { __typename?: 'Query', getGameList: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'GameDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } }, data: { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } } | null } | null> | null } };
 
+export type GetBacklogGameListByNameQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBacklogGameListByNameQuery = { __typename?: 'Query', getGameList: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'GameDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } }, data: { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } } | null } | null> | null } };
+
 export type GamePartsFragment = { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null };
 
 export type GetGameDocumentQueryVariables = Exact<{
@@ -461,6 +466,36 @@ export const GetGameListByNameDocument = gql`
   }
 }
     ${GamePartsFragmentDoc}`;
+export const GetBacklogGameListByNameDocument = gql`
+    query getBacklogGameListByName {
+  getGameList(
+    sort: "name"
+    filter: {status: {in: ["Playing", "Backlog"]}}
+    first: 50
+  ) {
+    totalCount
+    edges {
+      node {
+        id
+        sys {
+          filename
+          basename
+          breadcrumbs
+          path
+          relativePath
+          extension
+          collection {
+            slug
+          }
+        }
+        data {
+          ...GameParts
+        }
+      }
+    }
+  }
+}
+    ${GamePartsFragmentDoc}`;
 export const GetGameDocumentDocument = gql`
     query getGameDocument($relativePath: String!) {
   getGameDocument(relativePath: $relativePath) {
@@ -507,6 +542,9 @@ export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) 
     return {
       getGameListByName(variables?: GetGameListByNameQueryVariables, options?: C): Promise<{data: GetGameListByNameQuery, variables: GetGameListByNameQueryVariables, query: string}> {
         return requester<{data: GetGameListByNameQuery, variables: GetGameListByNameQueryVariables, query: string}, GetGameListByNameQueryVariables>(GetGameListByNameDocument, variables, options);
+      },
+    getBacklogGameListByName(variables?: GetBacklogGameListByNameQueryVariables, options?: C): Promise<{data: GetBacklogGameListByNameQuery, variables: GetBacklogGameListByNameQueryVariables, query: string}> {
+        return requester<{data: GetBacklogGameListByNameQuery, variables: GetBacklogGameListByNameQueryVariables, query: string}, GetBacklogGameListByNameQueryVariables>(GetBacklogGameListByNameDocument, variables, options);
       },
     getGameDocument(variables: GetGameDocumentQueryVariables, options?: C): Promise<{data: GetGameDocumentQuery, variables: GetGameDocumentQueryVariables, query: string}> {
         return requester<{data: GetGameDocumentQuery, variables: GetGameDocumentQueryVariables, query: string}, GetGameDocumentQueryVariables>(GetGameDocumentDocument, variables, options);

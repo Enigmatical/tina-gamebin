@@ -22,3 +22,32 @@ query getGameListByName {
     }
   }
 }
+
+query getBacklogGameListByName {
+  getGameList(
+    sort: "name"
+    filter: { status: { in: ["Playing", "Backlog"] } }
+    first: 50
+  ) {
+    totalCount
+    edges {
+      node {
+        id
+        sys {
+          filename
+          basename
+          breadcrumbs
+          path
+          relativePath
+          extension
+          collection {
+            slug
+          }
+        }
+        data {
+          ...GameParts
+        }
+      }
+    }
+  }
+}
