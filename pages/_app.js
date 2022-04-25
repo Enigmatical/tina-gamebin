@@ -1,4 +1,4 @@
-import "../styles/index.css";
+import "../styles/global.css";
 import TinaProvider from "../.tina/components/TinaDynamicProvider";
 
 const App = ({ Component, pageProps }) => {

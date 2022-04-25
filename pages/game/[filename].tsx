@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import * as React from "react";
 
+import { useTina } from "tinacms/dist/edit-state";
 import Head from "next/head";
-import { staticRequest, gql } from "tinacms";
 import { CameraIcon } from "@heroicons/react/solid";
 
-import { getGame } from "../../lib/game";
+import { getGame, getGames } from "../../lib/game";
 import MarkedContent from "../../components/MarkedContent";
 import Navigation from "../../components/Navigation";
 
@@ -14,11 +14,13 @@ import GamePageReview from "./components/GamePageReview";
 import GamePageDetails from "./components/GamePageDetails";
 
 const GamePage = (props) => {
-  const {
-    data: {
-      getGameDocument: { data: game },
-    },
-  } = props;
+  const { data } = useTina({
+    query: props.query,
+    variables: props.variables,
+    data: props.data,
+  });
+
+  const game = data.getGameDocument.data;
   const { name, deck, status, sections, meta, boxart } = game;
 
   return (
@@ -158,28 +160,13 @@ export const getStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
-  const gamesList = await staticRequest({
-    query: gql`
-      query GetGamesList {
-        getGameList {
-          edges {
-            node {
-              sys {
-                filename
-              }
-            }
-          }
-        }
-      }
-    `,
-  });
+  const games = await getGames();
 
   return {
-    // @ts-ignore
-    paths: gamesList.getGameList.edges.map((game) => ({
+    paths: games.data.getGameList.edges.map((game) => ({
       params: { filename: game.node.sys.filename },
     })),
-    fallback: false,
+    fallback: "blocking",
   };
 };
 

@@ -99,6 +99,8 @@ export type QueryGetDocumentListArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Float']>;
   last?: InputMaybe<Scalars['Float']>;
+  sort?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<DocumentFilter>;
 };
 
 
@@ -112,6 +114,12 @@ export type QueryGetGameListArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Float']>;
   last?: InputMaybe<Scalars['Float']>;
+  sort?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<GameFilter>;
+};
+
+export type DocumentFilter = {
+  game?: InputMaybe<GameFilter>;
 };
 
 export type DocumentConnectionEdges = {
@@ -146,6 +154,8 @@ export type CollectionDocumentsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Float']>;
   last?: InputMaybe<Scalars['Float']>;
+  sort?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<DocumentFilter>;
 };
 
 export type DocumentNode = GameDocument;
@@ -202,6 +212,69 @@ export type GameDocument = Node & Document & {
   dataJSON: Scalars['JSON'];
 };
 
+export type StringFilter = {
+  startsWith?: InputMaybe<Scalars['String']>;
+  eq?: InputMaybe<Scalars['String']>;
+  exists?: InputMaybe<Scalars['Boolean']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type GameMetaFilter = {
+  genre?: InputMaybe<StringFilter>;
+  platform?: InputMaybe<StringFilter>;
+  medium?: InputMaybe<StringFilter>;
+};
+
+export type DatetimeFilter = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  eq?: InputMaybe<Scalars['String']>;
+  exists?: InputMaybe<Scalars['Boolean']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type GameSectionsDetailsFilter = {
+  dateReleased?: InputMaybe<DatetimeFilter>;
+  averageRating?: InputMaybe<StringFilter>;
+  averagePlaytime?: InputMaybe<StringFilter>;
+  content?: InputMaybe<StringFilter>;
+  learnMoreLink?: InputMaybe<StringFilter>;
+};
+
+export type GameSectionsBacklogFilter = {
+  interest?: InputMaybe<StringFilter>;
+  content?: InputMaybe<StringFilter>;
+};
+
+export type GameSectionsReviewFilter = {
+  dateFinished?: InputMaybe<DatetimeFilter>;
+  stars?: InputMaybe<StringFilter>;
+  playtime?: InputMaybe<StringFilter>;
+  content?: InputMaybe<StringFilter>;
+};
+
+export type GameSectionsFilter = {
+  details?: InputMaybe<GameSectionsDetailsFilter>;
+  backlog?: InputMaybe<GameSectionsBacklogFilter>;
+  review?: InputMaybe<GameSectionsReviewFilter>;
+};
+
+export type ImageFilter = {
+  startsWith?: InputMaybe<Scalars['String']>;
+  eq?: InputMaybe<Scalars['String']>;
+  exists?: InputMaybe<Scalars['Boolean']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type GameFilter = {
+  name?: InputMaybe<StringFilter>;
+  deck?: InputMaybe<StringFilter>;
+  status?: InputMaybe<StringFilter>;
+  meta?: InputMaybe<GameMetaFilter>;
+  sections?: InputMaybe<GameSectionsFilter>;
+  boxart?: InputMaybe<ImageFilter>;
+};
+
 export type GameConnectionEdges = {
   __typename?: 'GameConnectionEdges';
   cursor?: Maybe<Scalars['String']>;
@@ -219,6 +292,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addPendingDocument: DocumentNode;
   updateDocument: DocumentNode;
+  deleteDocument: DocumentNode;
   createDocument: DocumentNode;
   updateGameDocument: GameDocument;
   createGameDocument: GameDocument;
@@ -236,6 +310,12 @@ export type MutationUpdateDocumentArgs = {
   collection?: InputMaybe<Scalars['String']>;
   relativePath: Scalars['String'];
   params: DocumentMutation;
+};
+
+
+export type MutationDeleteDocumentArgs = {
+  collection?: InputMaybe<Scalars['String']>;
+  relativePath: Scalars['String'];
 };
 
 
@@ -302,6 +382,11 @@ export type GameMutation = {
   boxart?: InputMaybe<Scalars['String']>;
 };
 
+export type GetGameListByNameQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGameListByNameQuery = { __typename?: 'Query', getGameList: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'GameDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } }, data: { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } } | null } | null> | null } };
+
 export type GamePartsFragment = { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null };
 
 export type GetGameDocumentQueryVariables = Exact<{
@@ -350,6 +435,32 @@ export const GamePartsFragmentDoc = gql`
   boxart
 }
     `;
+export const GetGameListByNameDocument = gql`
+    query getGameListByName {
+  getGameList(sort: "name", first: 50) {
+    totalCount
+    edges {
+      node {
+        id
+        sys {
+          filename
+          basename
+          breadcrumbs
+          path
+          relativePath
+          extension
+          collection {
+            slug
+          }
+        }
+        data {
+          ...GameParts
+        }
+      }
+    }
+  }
+}
+    ${GamePartsFragmentDoc}`;
 export const GetGameDocumentDocument = gql`
     query getGameDocument($relativePath: String!) {
   getGameDocument(relativePath: $relativePath) {
@@ -394,7 +505,10 @@ export const GetGameListDocument = gql`
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
   export function getSdk<C>(requester: Requester<C>) {
     return {
-      getGameDocument(variables: GetGameDocumentQueryVariables, options?: C): Promise<{data: GetGameDocumentQuery, variables: GetGameDocumentQueryVariables, query: string}> {
+      getGameListByName(variables?: GetGameListByNameQueryVariables, options?: C): Promise<{data: GetGameListByNameQuery, variables: GetGameListByNameQueryVariables, query: string}> {
+        return requester<{data: GetGameListByNameQuery, variables: GetGameListByNameQueryVariables, query: string}, GetGameListByNameQueryVariables>(GetGameListByNameDocument, variables, options);
+      },
+    getGameDocument(variables: GetGameDocumentQueryVariables, options?: C): Promise<{data: GetGameDocumentQuery, variables: GetGameDocumentQueryVariables, query: string}> {
         return requester<{data: GetGameDocumentQuery, variables: GetGameDocumentQueryVariables, query: string}, GetGameDocumentQueryVariables>(GetGameDocumentDocument, variables, options);
       },
     getGameList(variables?: GetGameListQueryVariables, options?: C): Promise<{data: GetGameListQuery, variables: GetGameListQueryVariables, query: string}> {

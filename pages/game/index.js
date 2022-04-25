@@ -44,34 +44,9 @@ const StatusColumn = ({ status }) => {
 const GameList = (props) => {
   const {
     data: {
-      getGameList: { edges: games },
+      getGameList: { totalCount, edges: games },
     },
   } = props;
-
-  const sortGames = games.sort(
-    (
-      {
-        node: {
-          data: { name: a },
-        },
-      },
-      {
-        node: {
-          data: { name: b },
-        },
-      }
-    ) => {
-      if (a < b) {
-        return -1;
-      }
-      if (b > a) {
-        return 1;
-      }
-      if (a === b) {
-        return 0;
-      }
-    }
-  );
 
   const backlogGames = games.filter(
     ({
@@ -104,7 +79,7 @@ const GameList = (props) => {
   );
 
   const stats = [
-    { name: "Total", stat: games.length, Icon: ArchiveIcon },
+    { name: "Total", stat: totalCount, Icon: ArchiveIcon },
     {
       name: "Backlog",
       stat: backlogGames.length,
@@ -185,7 +160,7 @@ const GameList = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {sortGames.map(({ node: { sys, data } }, idx) => (
+                      {games.map(({ node: { sys, data } }, idx) => (
                         <tr
                           key={data.name}
                           className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}

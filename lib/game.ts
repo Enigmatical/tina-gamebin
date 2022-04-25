@@ -1,92 +1,20 @@
-import { getStaticPropsForTina, gql } from "tinacms";
+import { staticRequest } from "tinacms";
+import { ExperimentalGetTinaClient } from "../.tina/__generated__/types";
 
 export const getGame = async (filename: string) => {
-  return await getStaticPropsForTina({
-    query: gql`
-      query GetGameDocument($relativePath: String!) {
-        getGameDocument(relativePath: $relativePath) {
-          data {
-            name
-            deck
-            status
-            sections {
-              __typename
-              ... on GameSectionsDetails {
-                content
-                learnMoreLink
-                dateReleased
-                averagePlaytime
-                averageRating
-              }
-              ... on GameSectionsBacklog {
-                content
-                interest
-              }
-              ... on GameSectionsReview {
-                content
-                dateFinished
-                playtime
-                stars
-              }
-            }
-            boxart
-            meta {
-              medium
-              platform
-              genre
-            }
-          }
-        }
-      }
-    `,
-    variables: { relativePath: `${filename}.md` },
+  const client = ExperimentalGetTinaClient();
+  const game = await client.getGameDocument({
+    relativePath: `${filename}.md`,
   });
+
+  return game;
 };
 
 export const getGames = async () => {
-  return await getStaticPropsForTina({
-    query: gql`
-      query getGameList {
-        getGameList {
-          edges {
-            node {
-              sys {
-                collection {
-                  slug
-                }
-                breadcrumbs
-              }
-              data {
-                name
-                status
-                sections {
-                  __typename
-                  ... on GameSectionsDetails {
-                    averageRating
-                    averagePlaytime
-                  }
-                  ... on GameSectionsBacklog {
-                    interest
-                  }
-                  ... on GameSectionsReview {
-                    dateFinished
-                    stars
-                    playtime
-                  }
-                }
-                meta {
-                  medium
-                  platform
-                  genre
-                }
-              }
-            }
-          }
-        }
-      }
-    `,
-    variables: {},
-  });
+  const client = ExperimentalGetTinaClient();
+  const games = await client.getGameListByName();
+
+  return games;
 };
 
 export const countStars = (rating: number) => {
