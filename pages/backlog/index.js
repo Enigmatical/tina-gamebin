@@ -1,11 +1,6 @@
 import * as React from "react";
 import Head from "next/head";
-import {
-  getBacklog,
-  countStars,
-  getStarString,
-  getStarColor,
-} from "../../lib/game";
+import { getBacklog } from "../../lib/game";
 import {
   ArchiveIcon,
   ClockIcon,
@@ -13,7 +8,11 @@ import {
   QuestionMarkCircleIcon,
 } from "@heroicons/react/solid";
 import Navigation from "../../components/Navigation";
-import Stat from "../../components/Stat";
+import Stat, {
+  countStars,
+  getStarString,
+  getStarColor,
+} from "../../components/Stat";
 import { INTEREST_STRONG, INTEREST_WEAK } from "../../.tina/constants";
 
 const InterestColumn = ({ interest }) => {
@@ -42,7 +41,7 @@ const InterestColumn = ({ interest }) => {
 const BacklogList = (props) => {
   const {
     data: {
-      getGameList: { edges: games },
+      gameConnection: { edges: games },
     },
   } = props;
 
@@ -53,10 +52,10 @@ const BacklogList = (props) => {
   let totalAveragePlaytime = 0;
 
   games.forEach((game) => {
-    const sectionDetails = game.node.data.sections?.filter(
+    const sectionDetails = game.node.sections?.filter(
       (section) => section.__typename === "GameSectionsDetails"
     );
-    const sectionBacklog = game.node.data.sections?.filter(
+    const sectionBacklog = game.node.sections?.filter(
       (section) => section.__typename === "GameSectionsBacklog"
     );
 
@@ -154,7 +153,10 @@ const BacklogList = (props) => {
                     </thead>
                     <tbody>
                       {filterGames.map(
-                        ({ node: { sys, data }, details, backlog }, idx) => {
+                        (
+                          { node: { _sys, ...data }, details, backlog },
+                          idx
+                        ) => {
                           const starsNumber = countStars(
                             parseInt(details.averageRating)
                           );
@@ -172,8 +174,8 @@ const BacklogList = (props) => {
                                 {data.name && (
                                   <a
                                     href={`/${
-                                      sys.collection.slug
-                                    }/${sys.breadcrumbs.join("/")}`}
+                                      _sys.collection.slug
+                                    }/${_sys.breadcrumbs.join("/")}`}
                                   >
                                     {data.name}
                                   </a>

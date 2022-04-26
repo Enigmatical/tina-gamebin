@@ -1,60 +1,46 @@
 import * as React from "react";
 import Head from "next/head";
-import { getGames, getStarString, getStarColor } from "../../lib/game";
+import { getFinished } from "../../lib/game";
 import { ArchiveIcon, CalendarIcon, ClockIcon } from "@heroicons/react/solid";
 import Navigation from "../../components/Navigation";
-import Stat from "../../components/Stat";
-import { STATUS_FINISHED } from "../../.tina/constants";
+import Stat, { getStarColor, getStarString } from "../../components/Stat";
 
 /**
  * Sorts games by their finished date in descending order
  */
 const sortGames = (games) => {
-  return games.sort(
-    (
-      {
-        node: {
-          data: { sections: a },
-        },
-      },
-      {
-        node: {
-          data: { sections: b },
-        },
-      }
-    ) => {
-      const aReview = a.filter(
-        (section) => section.__typename === "GameSectionsReview"
-      );
-      const bReview = b.filter(
-        (section) => section.__typename === "GameSectionsReview"
-      );
-      const aFinished = aReview[0].dateFinished;
-      const bFinished = bReview[0].dateFinished;
+  return games.sort(({ node: { sections: a } }, { node: { sections: b } }) => {
+    const aReview = a.filter(
+      (section) => section.__typename === "GameSectionsReview"
+    );
+    const bReview = b.filter(
+      (section) => section.__typename === "GameSectionsReview"
+    );
+    const aFinished = aReview[0].dateFinished;
+    const bFinished = bReview[0].dateFinished;
 
-      if (!aFinished || !bFinished) {
-        return 0;
-      }
-
-      if (aFinished > bFinished) {
-        return 1;
-      }
-
-      if (bFinished < aFinished) {
-        return -1;
-      }
-
-      if (aFinished === bFinished) {
-        return 0;
-      }
+    if (!aFinished || !bFinished) {
+      return 0;
     }
-  );
+
+    if (aFinished > bFinished) {
+      return 1;
+    }
+
+    if (bFinished < aFinished) {
+      return -1;
+    }
+
+    if (aFinished === bFinished) {
+      return 0;
+    }
+  });
 };
 
 const YearsList = (props) => {
   const {
     data: {
-      getGameList: { edges: games },
+      gameConnection: { edges: games },
     },
   } = props;
 
@@ -64,43 +50,40 @@ const YearsList = (props) => {
   const gamesByYear = {};
 
   games.forEach((game) => {
-    const name = game.node.data.name;
-    const status = game.node.data.status;
-    if (status === STATUS_FINISHED) {
-      try {
-        const sectionDetails = game.node.data.sections?.filter(
-          (section) => section.__typename === "GameSectionsDetails"
-        );
-        const sectionReview = game.node.data.sections?.filter(
-          (section) => section.__typename === "GameSectionsReview"
-        );
+    const name = game.node.name;
 
-        const dateFinished = sectionReview[0].dateFinished;
-        const yearFinished = new Date(dateFinished).getFullYear();
-        if (!gamesByYear[yearFinished]) {
-          gamesByYear[yearFinished] = { games: [], totalPlaytime: 0 };
-        }
+    try {
+      const sectionDetails = game.node.sections?.filter(
+        (section) => section.__typename === "GameSectionsDetails"
+      );
+      const sectionReview = game.node.sections?.filter(
+        (section) => section.__typename === "GameSectionsReview"
+      );
 
-        const playtime =
-          sectionReview[0].playtime || sectionDetails[0].averagePlaytime || 0;
-        if (!Number.isNaN(parseInt(playtime))) {
-          gamesByYear[yearFinished].totalPlaytime += parseInt(playtime);
-        }
-
-        gamesByYear[yearFinished].games.push({
-          ...game,
-          review: sectionReview[0],
-          dateFinished,
-        });
-        return;
-      } catch (err) {
-        console.warn(
-          `[YearsList] Unable to display "${name}": "${err}", Check to make sure the game has a "Review" Section and "Finished On" is filled out.`
-        );
-        return;
+      const dateFinished = sectionReview[0].dateFinished;
+      const yearFinished = new Date(dateFinished).getFullYear();
+      if (!gamesByYear[yearFinished]) {
+        gamesByYear[yearFinished] = { games: [], totalPlaytime: 0 };
       }
+
+      const playtime =
+        sectionReview[0].playtime || sectionDetails[0].averagePlaytime || 0;
+      if (!Number.isNaN(parseInt(playtime))) {
+        gamesByYear[yearFinished].totalPlaytime += parseInt(playtime);
+      }
+
+      gamesByYear[yearFinished].games.push({
+        ...game,
+        review: sectionReview[0],
+        dateFinished,
+      });
+      return;
+    } catch (err) {
+      console.warn(
+        `[YearsList] Unable to display "${name}": "${err}", Check to make sure the game has a "Review" Section and "Finished On" is filled out.`
+      );
+      return;
     }
-    return;
   });
 
   /**
@@ -199,7 +182,11 @@ const YearsList = (props) => {
                           <tbody>
                             {sortedGames.map(
                               (
-                                { node: { sys, data }, review, dateFinished },
+                                {
+                                  node: { _sys, ...data },
+                                  review,
+                                  dateFinished,
+                                },
                                 idx
                               ) => {
                                 const localDateFinished = new Date(
@@ -227,8 +214,8 @@ const YearsList = (props) => {
                                       {data.name && (
                                         <a
                                           href={`/${
-                                            sys.collection.slug
-                                          }/${sys.breadcrumbs.join("/")}`}
+                                            _sys.collection.slug
+                                          }/${_sys.breadcrumbs.join("/")}`}
                                         >
                                           {data.name}
                                         </a>
@@ -273,7 +260,7 @@ const YearsList = (props) => {
 };
 
 export const getStaticProps = async () => {
-  const games = await getGames();
+  const games = await getFinished();
 
   return {
     props: {

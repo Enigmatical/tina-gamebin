@@ -1,4 +1,5 @@
 import { defineConfig } from "tinacms";
+import schema from "./schema";
 
 const branch = "main";
 const apiURL =
@@ -8,6 +9,7 @@ const apiURL =
 
 export default defineConfig({
   apiURL,
+  schema,
   mediaStore: async () => {
     const pack = await import("next-tinacms-cloudinary");
     return pack.TinaCloudCloudinaryMediaStore;

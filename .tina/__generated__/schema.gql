@@ -30,27 +30,25 @@ interface Node {
 
 """"""
 interface Document {
-  sys: SystemInfo
   id: ID!
-  form: JSON!
-  values: JSON!
+  _sys: SystemInfo
+  _values: JSON!
 }
 
 """A relay-compliant pagination connection"""
 interface Connection {
   totalCount: Float!
+  pageInfo: PageInfo!
 }
 
 type Query {
   getOptimizedQuery(queryString: String!): String
-  getCollection(collection: String): Collection!
-  getCollections: [Collection!]!
+  collection(collection: String): Collection!
+  collections: [Collection!]!
   node(id: String): Node!
-  getDocument(collection: String, relativePath: String): DocumentNode!
-  getDocumentList(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter): DocumentConnection!
-  getDocumentFields: JSON!
-  getGameDocument(relativePath: String): GameDocument!
-  getGameList(before: String, after: String, first: Float, last: Float, sort: String, filter: GameFilter): GameConnection!
+  document(collection: String, relativePath: String): DocumentNode!
+  game(relativePath: String): Game!
+  gameConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: GameFilter): GameConnection!
 }
 
 input DocumentFilter {
@@ -58,12 +56,12 @@ input DocumentFilter {
 }
 
 type DocumentConnectionEdges {
-  cursor: String
+  cursor: String!
   node: DocumentNode
 }
 
 type DocumentConnection implements Connection {
-  pageInfo: PageInfo
+  pageInfo: PageInfo!
   totalCount: Float!
   edges: [DocumentConnectionEdges]
 }
@@ -80,7 +78,7 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter): DocumentConnection!
 }
 
-union DocumentNode = GameDocument
+union DocumentNode = Game
 
 type GameMeta {
   genre: String
@@ -110,22 +108,16 @@ type GameSectionsReview {
 
 union GameSections = GameSectionsDetails | GameSectionsBacklog | GameSectionsReview
 
-type Game {
+type Game implements Node & Document {
   name: String
   deck: String
   status: String
   meta: GameMeta
   sections: [GameSections]
   boxart: String
-}
-
-type GameDocument implements Node & Document {
   id: ID!
-  sys: SystemInfo!
-  data: Game!
-  form: JSON!
-  values: JSON!
-  dataJSON: JSON!
+  _sys: SystemInfo!
+  _values: JSON!
 }
 
 input StringFilter {
@@ -192,12 +184,12 @@ input GameFilter {
 }
 
 type GameConnectionEdges {
-  cursor: String
-  node: GameDocument
+  cursor: String!
+  node: Game
 }
 
 type GameConnection implements Connection {
-  pageInfo: PageInfo
+  pageInfo: PageInfo!
   totalCount: Float!
   edges: [GameConnectionEdges]
 }
@@ -207,8 +199,8 @@ type Mutation {
   updateDocument(collection: String, relativePath: String!, params: DocumentMutation!): DocumentNode!
   deleteDocument(collection: String, relativePath: String!): DocumentNode!
   createDocument(collection: String, relativePath: String!, params: DocumentMutation!): DocumentNode!
-  updateGameDocument(relativePath: String!, params: GameMutation!): GameDocument!
-  createGameDocument(relativePath: String!, params: GameMutation!): GameDocument!
+  updateGame(relativePath: String!, params: GameMutation!): Game!
+  createGame(relativePath: String!, params: GameMutation!): Game!
 }
 
 input DocumentMutation {

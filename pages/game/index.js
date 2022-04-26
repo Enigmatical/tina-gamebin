@@ -44,39 +44,21 @@ const StatusColumn = ({ status }) => {
 const GameList = (props) => {
   const {
     data: {
-      getGameList: { totalCount, edges: games },
+      gameConnection: { totalCount, edges: games },
     },
   } = props;
 
-  const backlogGames = games.filter(
-    ({
-      node: {
-        data: { status },
-      },
-    }) => {
-      return status === STATUS_BACKLOG;
-    }
-  );
+  const backlogGames = games.filter(({ node: { status } }) => {
+    return status === STATUS_BACKLOG;
+  });
 
-  const playingGames = games.filter(
-    ({
-      node: {
-        data: { status },
-      },
-    }) => {
-      return status === STATUS_PLAYING;
-    }
-  );
+  const playingGames = games.filter(({ node: { status } }) => {
+    return status === STATUS_PLAYING;
+  });
 
-  const finishedGames = games.filter(
-    ({
-      node: {
-        data: { status },
-      },
-    }) => {
-      return status === STATUS_FINISHED;
-    }
-  );
+  const finishedGames = games.filter(({ node: { status } }) => {
+    return status === STATUS_FINISHED;
+  });
 
   const stats = [
     { name: "Total", stat: totalCount, Icon: ArchiveIcon },
@@ -160,7 +142,7 @@ const GameList = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {games.map(({ node: { sys, data } }, idx) => (
+                      {games.map(({ node: { _sys, ...data } }, idx) => (
                         <tr
                           key={data.name}
                           className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
@@ -169,8 +151,8 @@ const GameList = (props) => {
                             {data.name && (
                               <a
                                 href={`/${
-                                  sys.collection.slug
-                                }/${sys.breadcrumbs.join("/")}`}
+                                  _sys.collection.slug
+                                }/${_sys.breadcrumbs.join("/")}`}
                               >
                                 {data.name}
                               </a>

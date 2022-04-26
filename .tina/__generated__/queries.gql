@@ -1,6 +1,6 @@
-query getGameDocument($relativePath: String!) {
-  getGameDocument(relativePath: $relativePath) {
-    sys {
+query game($relativePath: String!) {
+  game(relativePath: $relativePath) {
+    _sys {
       filename
       basename
       breadcrumbs
@@ -9,19 +9,17 @@ query getGameDocument($relativePath: String!) {
       extension
     }
     id
-    data {
-      ...GameParts
-    }
+    ...GameParts
   }
 }
 
-query getGameList {
-  getGameList {
+query gameConnection {
+  gameConnection {
     totalCount
     edges {
       node {
         id
-        sys {
+        _sys {
           filename
           basename
           breadcrumbs
@@ -29,9 +27,7 @@ query getGameList {
           relativePath
           extension
         }
-        data {
-          ...GameParts
-        }
+        ...GameParts
       }
     }
   }

@@ -48,28 +48,26 @@ export type Node = {
 };
 
 export type Document = {
-  sys?: Maybe<SystemInfo>;
   id: Scalars['ID'];
-  form: Scalars['JSON'];
-  values: Scalars['JSON'];
+  _sys?: Maybe<SystemInfo>;
+  _values: Scalars['JSON'];
 };
 
 /** A relay-compliant pagination connection */
 export type Connection = {
   totalCount: Scalars['Float'];
+  pageInfo: PageInfo;
 };
 
 export type Query = {
   __typename?: 'Query';
   getOptimizedQuery?: Maybe<Scalars['String']>;
-  getCollection: Collection;
-  getCollections: Array<Collection>;
+  collection: Collection;
+  collections: Array<Collection>;
   node: Node;
-  getDocument: DocumentNode;
-  getDocumentList: DocumentConnection;
-  getDocumentFields: Scalars['JSON'];
-  getGameDocument: GameDocument;
-  getGameList: GameConnection;
+  document: DocumentNode;
+  game: Game;
+  gameConnection: GameConnection;
 };
 
 
@@ -78,7 +76,7 @@ export type QueryGetOptimizedQueryArgs = {
 };
 
 
-export type QueryGetCollectionArgs = {
+export type QueryCollectionArgs = {
   collection?: InputMaybe<Scalars['String']>;
 };
 
@@ -88,28 +86,18 @@ export type QueryNodeArgs = {
 };
 
 
-export type QueryGetDocumentArgs = {
+export type QueryDocumentArgs = {
   collection?: InputMaybe<Scalars['String']>;
   relativePath?: InputMaybe<Scalars['String']>;
 };
 
 
-export type QueryGetDocumentListArgs = {
-  before?: InputMaybe<Scalars['String']>;
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Float']>;
-  last?: InputMaybe<Scalars['Float']>;
-  sort?: InputMaybe<Scalars['String']>;
-  filter?: InputMaybe<DocumentFilter>;
-};
-
-
-export type QueryGetGameDocumentArgs = {
+export type QueryGameArgs = {
   relativePath?: InputMaybe<Scalars['String']>;
 };
 
 
-export type QueryGetGameListArgs = {
+export type QueryGameConnectionArgs = {
   before?: InputMaybe<Scalars['String']>;
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Float']>;
@@ -124,13 +112,13 @@ export type DocumentFilter = {
 
 export type DocumentConnectionEdges = {
   __typename?: 'DocumentConnectionEdges';
-  cursor?: Maybe<Scalars['String']>;
+  cursor: Scalars['String'];
   node?: Maybe<DocumentNode>;
 };
 
 export type DocumentConnection = Connection & {
   __typename?: 'DocumentConnection';
-  pageInfo?: Maybe<PageInfo>;
+  pageInfo: PageInfo;
   totalCount: Scalars['Float'];
   edges?: Maybe<Array<Maybe<DocumentConnectionEdges>>>;
 };
@@ -158,7 +146,7 @@ export type CollectionDocumentsArgs = {
   filter?: InputMaybe<DocumentFilter>;
 };
 
-export type DocumentNode = GameDocument;
+export type DocumentNode = Game;
 
 export type GameMeta = {
   __typename?: 'GameMeta';
@@ -192,7 +180,7 @@ export type GameSectionsReview = {
 
 export type GameSections = GameSectionsDetails | GameSectionsBacklog | GameSectionsReview;
 
-export type Game = {
+export type Game = Node & Document & {
   __typename?: 'Game';
   name?: Maybe<Scalars['String']>;
   deck?: Maybe<Scalars['String']>;
@@ -200,16 +188,9 @@ export type Game = {
   meta?: Maybe<GameMeta>;
   sections?: Maybe<Array<Maybe<GameSections>>>;
   boxart?: Maybe<Scalars['String']>;
-};
-
-export type GameDocument = Node & Document & {
-  __typename?: 'GameDocument';
   id: Scalars['ID'];
-  sys: SystemInfo;
-  data: Game;
-  form: Scalars['JSON'];
-  values: Scalars['JSON'];
-  dataJSON: Scalars['JSON'];
+  _sys: SystemInfo;
+  _values: Scalars['JSON'];
 };
 
 export type StringFilter = {
@@ -277,13 +258,13 @@ export type GameFilter = {
 
 export type GameConnectionEdges = {
   __typename?: 'GameConnectionEdges';
-  cursor?: Maybe<Scalars['String']>;
-  node?: Maybe<GameDocument>;
+  cursor: Scalars['String'];
+  node?: Maybe<Game>;
 };
 
 export type GameConnection = Connection & {
   __typename?: 'GameConnection';
-  pageInfo?: Maybe<PageInfo>;
+  pageInfo: PageInfo;
   totalCount: Scalars['Float'];
   edges?: Maybe<Array<Maybe<GameConnectionEdges>>>;
 };
@@ -294,8 +275,8 @@ export type Mutation = {
   updateDocument: DocumentNode;
   deleteDocument: DocumentNode;
   createDocument: DocumentNode;
-  updateGameDocument: GameDocument;
-  createGameDocument: GameDocument;
+  updateGame: Game;
+  createGame: Game;
 };
 
 
@@ -326,13 +307,13 @@ export type MutationCreateDocumentArgs = {
 };
 
 
-export type MutationUpdateGameDocumentArgs = {
+export type MutationUpdateGameArgs = {
   relativePath: Scalars['String'];
   params: GameMutation;
 };
 
 
-export type MutationCreateGameDocumentArgs = {
+export type MutationCreateGameArgs = {
   relativePath: Scalars['String'];
   params: GameMutation;
 };
@@ -382,30 +363,52 @@ export type GameMutation = {
   boxart?: InputMaybe<Scalars['String']>;
 };
 
-export type GetGameListByNameQueryVariables = Exact<{ [key: string]: never; }>;
+export type SysPartsFragment = { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } };
+
+export type ListPartsFragment = { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'Game', id: string, name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } }, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } | null } | null> | null };
+
+export type GamesByNameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetGameListByNameQuery = { __typename?: 'Query', getGameList: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'GameDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } }, data: { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } } | null } | null> | null } };
+export type GamesByNameQuery = { __typename?: 'Query', gameConnection: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'Game', id: string, name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } }, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } | null } | null> | null } };
 
-export type GetBacklogGameListByNameQueryVariables = Exact<{ [key: string]: never; }>;
+export type BacklogGamesByNameQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBacklogGameListByNameQuery = { __typename?: 'Query', getGameList: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'GameDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } }, data: { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } } | null } | null> | null } };
+export type BacklogGamesByNameQuery = { __typename?: 'Query', gameConnection: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'Game', id: string, name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } }, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } | null } | null> | null } };
+
+export type FinishedGamesByNameQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FinishedGamesByNameQuery = { __typename?: 'Query', gameConnection: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'Game', id: string, name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string, collection: { __typename?: 'Collection', slug: string } }, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } | null } | null> | null } };
 
 export type GamePartsFragment = { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null };
 
-export type GetGameDocumentQueryVariables = Exact<{
+export type GameQueryVariables = Exact<{
   relativePath: Scalars['String'];
 }>;
 
 
-export type GetGameDocumentQuery = { __typename?: 'Query', getGameDocument: { __typename?: 'GameDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } } };
+export type GameQuery = { __typename?: 'Query', game: { __typename?: 'Game', id: string, name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } };
 
-export type GetGameListQueryVariables = Exact<{ [key: string]: never; }>;
+export type GameConnectionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetGameListQuery = { __typename?: 'Query', getGameList: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'GameDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Game', name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } } | null } | null> | null } };
+export type GameConnectionQuery = { __typename?: 'Query', gameConnection: { __typename?: 'GameConnection', totalCount: number, edges?: Array<{ __typename?: 'GameConnectionEdges', node?: { __typename?: 'Game', id: string, name?: string | null, deck?: string | null, status?: string | null, boxart?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, meta?: { __typename: 'GameMeta', genre?: string | null, platform?: string | null, medium?: string | null } | null, sections?: Array<{ __typename: 'GameSectionsDetails', dateReleased?: string | null, averageRating?: string | null, averagePlaytime?: string | null, content?: string | null, learnMoreLink?: string | null } | { __typename: 'GameSectionsBacklog', interest?: string | null, content?: string | null } | { __typename: 'GameSectionsReview', dateFinished?: string | null, stars?: string | null, playtime?: string | null, content?: string | null } | null> | null } | null } | null> | null } };
 
+export const SysPartsFragmentDoc = gql`
+    fragment SysParts on SystemInfo {
+  filename
+  basename
+  breadcrumbs
+  path
+  relativePath
+  extension
+  collection {
+    slug
+  }
+}
+    `;
 export const GamePartsFragmentDoc = gql`
     fragment GameParts on Game {
   name
@@ -440,66 +443,52 @@ export const GamePartsFragmentDoc = gql`
   boxart
 }
     `;
-export const GetGameListByNameDocument = gql`
-    query getGameListByName {
-  getGameList(sort: "name", first: 50) {
-    totalCount
-    edges {
-      node {
-        id
-        sys {
-          filename
-          basename
-          breadcrumbs
-          path
-          relativePath
-          extension
-          collection {
-            slug
-          }
+export const ListPartsFragmentDoc = gql`
+    fragment ListParts on GameConnection {
+  totalCount
+  edges {
+    node {
+      id
+      ... on Game {
+        _sys {
+          ...SysParts
         }
-        data {
-          ...GameParts
-        }
+        ...GameParts
       }
     }
   }
 }
-    ${GamePartsFragmentDoc}`;
-export const GetBacklogGameListByNameDocument = gql`
-    query getBacklogGameListByName {
-  getGameList(
+    ${SysPartsFragmentDoc}
+${GamePartsFragmentDoc}`;
+export const GamesByNameDocument = gql`
+    query gamesByName {
+  gameConnection(sort: "name", first: 50) {
+    ...ListParts
+  }
+}
+    ${ListPartsFragmentDoc}`;
+export const BacklogGamesByNameDocument = gql`
+    query backlogGamesByName {
+  gameConnection(
     sort: "name"
     filter: {status: {in: ["Playing", "Backlog"]}}
     first: 50
   ) {
-    totalCount
-    edges {
-      node {
-        id
-        sys {
-          filename
-          basename
-          breadcrumbs
-          path
-          relativePath
-          extension
-          collection {
-            slug
-          }
-        }
-        data {
-          ...GameParts
-        }
-      }
-    }
+    ...ListParts
   }
 }
-    ${GamePartsFragmentDoc}`;
-export const GetGameDocumentDocument = gql`
-    query getGameDocument($relativePath: String!) {
-  getGameDocument(relativePath: $relativePath) {
-    sys {
+    ${ListPartsFragmentDoc}`;
+export const FinishedGamesByNameDocument = gql`
+    query finishedGamesByName {
+  gameConnection(sort: "name", filter: {status: {eq: "Finished"}}, first: 50) {
+    ...ListParts
+  }
+}
+    ${ListPartsFragmentDoc}`;
+export const GameDocument = gql`
+    query game($relativePath: String!) {
+  game(relativePath: $relativePath) {
+    _sys {
       filename
       basename
       breadcrumbs
@@ -508,20 +497,18 @@ export const GetGameDocumentDocument = gql`
       extension
     }
     id
-    data {
-      ...GameParts
-    }
+    ...GameParts
   }
 }
     ${GamePartsFragmentDoc}`;
-export const GetGameListDocument = gql`
-    query getGameList {
-  getGameList {
+export const GameConnectionDocument = gql`
+    query gameConnection {
+  gameConnection {
     totalCount
     edges {
       node {
         id
-        sys {
+        _sys {
           filename
           basename
           breadcrumbs
@@ -529,9 +516,7 @@ export const GetGameListDocument = gql`
           relativePath
           extension
         }
-        data {
-          ...GameParts
-        }
+        ...GameParts
       }
     }
   }
@@ -540,17 +525,20 @@ export const GetGameListDocument = gql`
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
   export function getSdk<C>(requester: Requester<C>) {
     return {
-      getGameListByName(variables?: GetGameListByNameQueryVariables, options?: C): Promise<{data: GetGameListByNameQuery, variables: GetGameListByNameQueryVariables, query: string}> {
-        return requester<{data: GetGameListByNameQuery, variables: GetGameListByNameQueryVariables, query: string}, GetGameListByNameQueryVariables>(GetGameListByNameDocument, variables, options);
+      gamesByName(variables?: GamesByNameQueryVariables, options?: C): Promise<{data: GamesByNameQuery, variables: GamesByNameQueryVariables, query: string}> {
+        return requester<{data: GamesByNameQuery, variables: GamesByNameQueryVariables, query: string}, GamesByNameQueryVariables>(GamesByNameDocument, variables, options);
       },
-    getBacklogGameListByName(variables?: GetBacklogGameListByNameQueryVariables, options?: C): Promise<{data: GetBacklogGameListByNameQuery, variables: GetBacklogGameListByNameQueryVariables, query: string}> {
-        return requester<{data: GetBacklogGameListByNameQuery, variables: GetBacklogGameListByNameQueryVariables, query: string}, GetBacklogGameListByNameQueryVariables>(GetBacklogGameListByNameDocument, variables, options);
+    backlogGamesByName(variables?: BacklogGamesByNameQueryVariables, options?: C): Promise<{data: BacklogGamesByNameQuery, variables: BacklogGamesByNameQueryVariables, query: string}> {
+        return requester<{data: BacklogGamesByNameQuery, variables: BacklogGamesByNameQueryVariables, query: string}, BacklogGamesByNameQueryVariables>(BacklogGamesByNameDocument, variables, options);
       },
-    getGameDocument(variables: GetGameDocumentQueryVariables, options?: C): Promise<{data: GetGameDocumentQuery, variables: GetGameDocumentQueryVariables, query: string}> {
-        return requester<{data: GetGameDocumentQuery, variables: GetGameDocumentQueryVariables, query: string}, GetGameDocumentQueryVariables>(GetGameDocumentDocument, variables, options);
+    finishedGamesByName(variables?: FinishedGamesByNameQueryVariables, options?: C): Promise<{data: FinishedGamesByNameQuery, variables: FinishedGamesByNameQueryVariables, query: string}> {
+        return requester<{data: FinishedGamesByNameQuery, variables: FinishedGamesByNameQueryVariables, query: string}, FinishedGamesByNameQueryVariables>(FinishedGamesByNameDocument, variables, options);
       },
-    getGameList(variables?: GetGameListQueryVariables, options?: C): Promise<{data: GetGameListQuery, variables: GetGameListQueryVariables, query: string}> {
-        return requester<{data: GetGameListQuery, variables: GetGameListQueryVariables, query: string}, GetGameListQueryVariables>(GetGameListDocument, variables, options);
+    game(variables: GameQueryVariables, options?: C): Promise<{data: GameQuery, variables: GameQueryVariables, query: string}> {
+        return requester<{data: GameQuery, variables: GameQueryVariables, query: string}, GameQueryVariables>(GameDocument, variables, options);
+      },
+    gameConnection(variables?: GameConnectionQueryVariables, options?: C): Promise<{data: GameConnectionQuery, variables: GameConnectionQueryVariables, query: string}> {
+        return requester<{data: GameConnectionQuery, variables: GameConnectionQueryVariables, query: string}, GameConnectionQueryVariables>(GameConnectionDocument, variables, options);
       }
     };
   }

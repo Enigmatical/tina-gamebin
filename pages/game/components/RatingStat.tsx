@@ -1,6 +1,9 @@
 import { StarIcon } from "@heroicons/react/solid";
-import { countStars, getStarString, getStarColor } from "../../../lib/game";
-import Stat from "../../../components/Stat";
+import Stat, {
+  countStars,
+  getStarString,
+  getStarColor,
+} from "../../../components/Stat";
 
 interface Props {
   name?: string;

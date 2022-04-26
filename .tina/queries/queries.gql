@@ -1,53 +1,25 @@
-query getGameListByName {
-  getGameList(sort: "name", first: 50) {
-    totalCount
-    edges {
-      node {
-        id
-        sys {
-          filename
-          basename
-          breadcrumbs
-          path
-          relativePath
-          extension
-          collection {
-            slug
-          }
-        }
-        data {
-          ...GameParts
-        }
-      }
-    }
+query gamesByName {
+  gameConnection(sort: "name", first: 50) {
+    ...ListParts
   }
 }
 
-query getBacklogGameListByName {
-  getGameList(
+query backlogGamesByName {
+  gameConnection(
     sort: "name"
     filter: { status: { in: ["Playing", "Backlog"] } }
     first: 50
   ) {
-    totalCount
-    edges {
-      node {
-        id
-        sys {
-          filename
-          basename
-          breadcrumbs
-          path
-          relativePath
-          extension
-          collection {
-            slug
-          }
-        }
-        data {
-          ...GameParts
-        }
-      }
-    }
+    ...ListParts
+  }
+}
+
+query finishedGamesByName {
+  gameConnection(
+    sort: "name"
+    filter: { status: { eq: "Finished" } }
+    first: 50
+  ) {
+    ...ListParts
   }
 }

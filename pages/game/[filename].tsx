@@ -20,8 +20,11 @@ const GamePage = (props) => {
     data: props.data,
   });
 
-  const game = data.getGameDocument.data;
-  const { name, deck, status, sections, meta, boxart } = game;
+  if (!data) {
+    return null;
+  }
+
+  const { name, deck, status, sections, meta, boxart } = data.game;
 
   return (
     <>
@@ -163,8 +166,8 @@ export const getStaticPaths = async () => {
   const games = await getGames();
 
   return {
-    paths: games.data.getGameList.edges.map((game) => ({
-      params: { filename: game.node.sys.filename },
+    paths: games.data.gameConnection.edges.map((game) => ({
+      params: { filename: game.node._sys.filename },
     })),
     fallback: "blocking",
   };

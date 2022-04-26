@@ -1,0 +1,26 @@
+fragment SysParts on SystemInfo {
+  filename
+  basename
+  breadcrumbs
+  path
+  relativePath
+  extension
+  collection {
+    slug
+  }
+}
+
+fragment ListParts on GameConnection {
+  totalCount
+  edges {
+    node {
+      id
+      ... on Game {
+        _sys {
+          ...SysParts
+        }
+        ...GameParts
+      }
+    }
+  }
+}
