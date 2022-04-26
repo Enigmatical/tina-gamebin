@@ -1,12 +1,12 @@
 ---
 name: 'Hyrule Warriors: Age of Calamity'
-status: Playing
+status: Finished
 meta:
   genre: Action
   platform: Nintendo Switch
   medium: Digital
 sections:
-  - dateReleased: 'Fri, 20 Nov 2020 06:00:00 GMT'
+  - dateReleased: '2020-11-20T06:00:00.000Z'
     averageRating: '79'
     averagePlaytime: '23'
     content: >-
@@ -18,15 +18,12 @@ sections:
       way to firsthand see what happened 100 years ago.
     learnMoreLink: 'https://www.giantbomb.com/hyrule-warriors-age-of-calamity/3030-80542/'
     _template: details
-  - interest: Strong
-    content: >-
-      I've put well over 500 hours into the first Hyrule Warriors.
-
-
-      While the sequel is not _as_ good, I'm still enjoying the spectacle,
-      especially when paired with the style of BotW.
-    _template: backlog
+  - dateFinished: '2022-01-01T05:00:00.000Z'
+    stars: '4'
+    playtime: '50'
+    _template: review
 boxart: >-
   http://res.cloudinary.com/forestry-chris/image/upload/v1630428582/3241516-untitled-1_ac0nbb.png
 ---
+
 Hyrule Warriors: Age of Calamity is set 100 years prior to the events of Breath of the Wild.
