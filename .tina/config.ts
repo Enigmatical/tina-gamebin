@@ -17,7 +17,7 @@ export default defineConfig({
   cmsCallback: (cms) => {
     import("tinacms").then(({ RouteMappingPlugin }) => {
       const RouteMapping = new RouteMappingPlugin((collection, document) => {
-        return `/${collection.name}/${document.sys.filename}`;
+        return `/${collection.name}/${document._sys.filename}`;
       });
 
       cms.plugins.add(RouteMapping);

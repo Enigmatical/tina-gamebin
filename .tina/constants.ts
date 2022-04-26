@@ -32,6 +32,7 @@ export const PLATFORMS = [
   "Playstation 2",
   "Playstation 3",
   "Playstation 4",
+  "Playstation 5",
   "Playstation Vita",
   "Playstation VR",
   "Xbox 360",
